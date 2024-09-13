@@ -43,7 +43,7 @@
 
 header{
   /* width: 100%; */
-  background-color: blue;
+  background-color: #1a1a1a;
   display: flex;
   align-items: center;
   padding: 0 5%;
@@ -51,4 +51,41 @@ header{
 }
 u{
   display: flex;
+}
+.containerIntro{
+  margin-top: 10vh;
+  height: 60vh;
+  /* width: 70%; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  /* background-color: blueviolet; */
+}
+.intro{
+  display: flex;
+  align-items: center;
+}
+.containerIntroTitle{
+  /* text-align: center; */
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 5vh 0;
+}
+.textIntro{
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+.titleIntro{
+  font-size: 3.2rem;
+  font-weight: 800;
+}
+.containerIntroInfo{
+  width: 50%;
+  font-size: 1.2rem;
+}
+.containerIntroInfo button{
+  margin: 5%;
+  font-size: 1rem;
 }
