@@ -1,56 +1,92 @@
-import React, { useEffect, useState } from 'react';
-import { Bar } from 'react-chartjs-2';
+import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
+import { Bar } from 'react-chartjs-2';
+import { Chart, registerables } from 'chart.js';
+
+Chart.register(...registerables);
 
 const Histogram = () => {
-  const [csvData, setCsvData] = useState([]);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch('/Melbourne_housing_FULL.csv');
-      const reader = response.body.getReader();
-      const result = await reader.read();
-      const decoder = new TextDecoder('utf-8');
-      const csv = decoder.decode(result.value);
+      try {
+        const response = await fetch('/Melbourne_housing_FULL.csv');
+        const reader = response.body.getReader();
+        const result = await reader.read();
+        const decoder = new TextDecoder('utf-8');
+        const csv = decoder.decode(result.value);
 
-      Papa.parse(csv, {
-        header: true,
-        skipEmptyLines: true,
-        complete: function (results) {
-          setCsvData(results.data);
-        },
-      });
+        Papa.parse(csv, {
+          header: true,
+          skipEmptyLines: true,
+          complete: (results) => {
+            const processedData = results.data
+              .map(row => parseFloat(row.Price))
+              .filter(price => !isNaN(price));
+
+            setData(processedData);
+            setLoading(false);
+          },
+          error: (error) => {
+            console.error('Error parsing CSV:', error);
+            setLoading(false);
+          }
+        });
+      } catch (error) {
+        console.error('Error fetching CSV:', error);
+        setLoading(false);
+      }
     };
 
     fetchData();
   }, []);
 
-  // Obtener los precios y categorizar
-  const priceCategories = csvData.reduce((acc, row) => {
-    const price = parseFloat(row.Price);
-    if (price < 500000) acc['< 500K'] += 1;
-    else if (price < 1000000) acc['500K - 1M'] += 1;
-    else if (price < 1500000) acc['1M - 1.5M'] += 1;
-    else if (price < 2000000) acc['1.5M - 2M'] += 1;
-    else acc['> 2M'] += 1;
-    return acc;
-  }, { '< 500K': 0, '500K - 1M': 0, '1M - 1.5M': 0, '1.5M - 2M': 0, '> 2M': 0 });
+  const priceRanges = Array.from({ length: 10 }, (_, i) => i * 100000);
+  const priceCounts = priceRanges.map(range =>
+    data.filter(price => price >= range && price < range + 100000).length
+  );
 
-  const data = {
-    labels: Object.keys(priceCategories),
+  const chartData = {
+    labels: priceRanges.map(range => `$${range} - $${range + 100000}`),
     datasets: [
       {
-        label: 'Número de Propiedades',
-        data: Object.values(priceCategories),
-        backgroundColor: 'rgba(153, 102, 255, 0.6)',
-      },
-    ],
+        label: 'Cantidad de Propiedades',
+        data: priceCounts,
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+      }
+    ]
   };
+
+  const chartOptions = {
+    responsive: true,
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Rangos de Precio ($)'
+        }
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Cantidad de Propiedades'
+        }
+      }
+    }
+  };
+
+  if (loading) {
+    return <p>Cargando datos para el gráfico...</p>;
+  }
 
   return (
     <div>
-      <h2>Distribución de Precios de las Propiedades</h2>
-      <Bar data={data} />
+      <h2>Histograma de Precios de Propiedades</h2>
+      <Bar data={chartData} options={chartOptions} />
     </div>
   );
 };

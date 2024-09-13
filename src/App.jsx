@@ -17,6 +17,22 @@ const App = () => {
 
   return (
     <div>
+      <header>
+      <h4>Estate View - Estadistica</h4>
+        <div>
+          <u>
+            <ol>¿Que es?</ol>
+            <ol>¿Como funciona?</ol>
+            <ol>¿Por que fue realizado?</ol>
+          </u>
+        </div>
+      </header>
+      <div>
+        <p>+30.000 registros</p>
+        <p>Akguna frase que explique el sitio brevemente</p>
+        <button>Descargar archivo original</button>
+        <button>Ver tabla de datos</button>
+      </div>
       {/* <div>
       <CsvLoader setCsvData={setCsvData} />
       <ScatterPlot csvData={csvData} />
