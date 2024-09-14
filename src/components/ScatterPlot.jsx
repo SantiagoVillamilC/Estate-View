@@ -13,8 +13,7 @@ const ScatterPlot = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5000;
-  const distanceGroups = [10, 20, 30, 40, 50]; // Rango de 10km hasta 50km
+  const itemsPerPage = 7000;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,8 +33,8 @@ const ScatterPlot = () => {
               const price = parseFloat(row.Price);
 
               if (!isNaN(distance) && !isNaN(price)) {
-                // Jittering: añadir desplazamiento aleatorio pequeño
-                const jitter = Math.random() * 0.1 - 0.05; // Desplazamiento +/-0.05
+                // Añadir desplazamiento aleatorio pequeño
+                const jitter = Math.random() * 0.1 - 0.05;
                 return { distance: distance + jitter, price };
               }
               return null;
@@ -79,25 +78,57 @@ const ScatterPlot = () => {
 
   // Agrupación por colores según el rango de distancia
   const getColorByDistance = (distance) => {
-    if (distance <= 10) return 'rgba(255, 99, 132, 0.7)';
-    if (distance <= 20) return 'rgba(54, 162, 235, 0.7)';
-    if (distance <= 30) return 'rgba(75, 192, 192, 0.7)';
-    if (distance <= 40) return 'rgba(153, 102, 255, 0.7)';
-    return 'rgba(255, 159, 64, 0.7)'; // Distancia > 40km
+    if (distance <= 5) return 'rgba(255, 99, 132, 0.7)'; // 0-5 km
+    if (distance <= 10) return 'rgba(54, 162, 235, 0.7)'; // 5-10 km
+    if (distance <= 20) return 'rgba(75, 192, 192, 0.7)'; // 10-20 km
+    if (distance <= 30) return 'rgba(153, 102, 255, 0.7)'; // 20-30 km
+    return 'rgba(255, 159, 64, 0.7)'; // Más de 30 km
   };
 
   const chartData = {
-    datasets: distanceGroups.map((maxDistance) => ({
-      label: `Menor a ${maxDistance} km`,
-      data: data
-        .filter((row) => row.distance <= maxDistance && row.distance > maxDistance - 10)
-        .map((row) => ({ x: row.distance, y: row.price })),
-      backgroundColor: getColorByDistance(maxDistance),
-      borderColor: getColorByDistance(maxDistance),
-      borderWidth: 1,
-      pointRadius: 5,
-      pointHoverRadius: 7
-    }))
+    datasets: [
+      {
+        label: '0-5 km',
+        data: data.filter((row) => row.distance <= 5).map((row) => ({ x: row.distance, y: row.price })),
+        backgroundColor: 'rgba(255, 99, 132, 0.7)',
+        borderColor: 'rgba(255, 99, 132, 0.7)',
+        pointRadius: 5,
+        pointHoverRadius: 7
+      },
+      {
+        label: '5-10 km',
+        data: data.filter((row) => row.distance > 5 && row.distance <= 10).map((row) => ({ x: row.distance, y: row.price })),
+        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+        borderColor: 'rgba(54, 162, 235, 0.7)',
+        pointRadius: 5,
+        pointHoverRadius: 7
+      },
+      {
+        label: '10-20 km',
+        data: data.filter((row) => row.distance > 10 && row.distance <= 20).map((row) => ({ x: row.distance, y: row.price })),
+        backgroundColor: 'rgba(75, 192, 192, 0.7)',
+        borderColor: 'rgba(75, 192, 192, 0.7)',
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        color: '#E3E3E3',
+      },
+      {
+        label: '20-30 km',
+        data: data.filter((row) => row.distance > 20 && row.distance <= 30).map((row) => ({ x: row.distance, y: row.price })),
+        backgroundColor: 'rgba(153, 102, 255, 0.7)',
+        borderColor: 'rgba(153, 102, 255, 0.7)',
+        pointRadius: 5,
+        pointHoverRadius: 7
+      },
+      {
+        label: 'Más de 30 km',
+        data: data.filter((row) => row.distance > 30).map((row) => ({ x: row.distance, y: row.price })),
+        backgroundColor: 'rgba(255, 159, 64, 0.7)',
+        borderColor: 'rgba(255, 159, 64, 0.7)',
+        pointRadius: 5,
+        pointHoverRadius: 7
+      }
+    ]
   };
 
   const chartOptions = {
@@ -124,28 +155,36 @@ const ScatterPlot = () => {
       },
       zoom: {
         pan: {
-          enabled: true,
+          enabled: false,
           mode: 'xy'
         },
         zoom: {
-          enabled: true,
+          enabled: false,
           mode: 'xy'
         }
       }
     },
     scales: {
       x: {
-        type: 'logarithmic',
+        type: 'linear',
         title: {
           display: true,
-          text: 'Distancia al CBD (km)'
-        }
+          text: 'Distancia al CBD (km)',
+          color: '#E3E3E3',
+        },
+        grid: {
+          color: '#E3E3E3', // Color de las líneas de la cuadrícula
+        },
       },
       y: {
         title: {
           display: true,
-          text: 'Precio en $'
-        }
+          text: 'Precio en $',
+          color: '#E3E3E3',
+        },
+        grid: {
+          color: '#E3E3E3', // Color de las líneas de la cuadrícula
+        },
       }
     }
   };

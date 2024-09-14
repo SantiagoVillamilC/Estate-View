@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import Papa from 'papaparse';
 
-const PieChart = () => {
+const PieChartType = () => {
   const [csvData, setCsvData] = useState([]);
 
   useEffect(() => {
@@ -48,4 +48,4 @@ const PieChart = () => {
   );
 };
 
-export default PieChart;
+export default PieChartType;
