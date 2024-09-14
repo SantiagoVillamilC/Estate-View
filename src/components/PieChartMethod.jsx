@@ -30,8 +30,22 @@ const PieChartMethod = () => {
     return acc;
   }, {});
 
+  const labelsMap = {
+    'S': 'Propiedad vendida',
+    'SP': 'Propiedad vendida antes de la subasta',
+    'PI': 'Propiedad retirada',
+    'PN': 'Vendida antes sin divulgar',
+    'SN': 'Vendida no divulgada',
+    'NB': 'Sin oferta',
+    'VB': 'Oferta del vendedor',
+    'W': 'Retirada antes de la subasta',
+    'SA': 'Vendida después de la subasta',
+    'SS': 'Vendida después con precio no divulgado',
+    'N/A': 'Precio o mayor oferta no disponible'
+  };
+
   const data = {
-    labels: Object.keys(methodCount),
+    labels: Object.keys(methodCount).map(key => labelsMap[key] || key),
     datasets: [
       {
         data: Object.values(methodCount),
@@ -40,10 +54,29 @@ const PieChartMethod = () => {
     ],
   };
 
+  const options = {
+    plugins: {
+      legend: {
+        labels: {
+          color: '#E3E3E3' // Cambia el color del texto de la leyenda
+        }
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const label = context.label || '';
+            const value = context.raw || '';
+            return `${label}: ${value}`;
+          }
+        }
+      }
+    }
+  };
+
   return (
     <div>
-      <h2>Distribución por Método de Venta</h2>
-      <Pie data={data} />
+      <h4>Distribución por Método de Venta</h4>
+      <Pie data={data} options={options} />
     </div>
   );
 };

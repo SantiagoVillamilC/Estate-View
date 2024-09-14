@@ -40,10 +40,29 @@ const PieChartRooms = () => {
     ],
   };
 
+  const options = {
+    plugins: {
+      legend: {
+        labels: {
+          color: '#E3E3E3' // Cambia el color del texto de la leyenda
+        }
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const label = context.label || '';
+            const value = context.raw || '';
+            return `${label}: ${value}`;
+          }
+        }
+      }
+    }
+  };
+
   return (
     <div>
-      <h2>Distribución por Número de Habitaciones</h2>
-      <Pie data={data} />
+      <h4>Distribución por Número de Habitaciones</h4>
+      <Pie data={data} options={options} />
     </div>
   );
 };

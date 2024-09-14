@@ -27,7 +27,7 @@ const App = () => {
   const rounded = useTransform(count, Math.round);
 
   useEffect(() => {
-    const animation = animate(count, 20000, { duration: 10 });
+    const animation = animate(count, 10000, { duration: 10 });
 
     return animation.stop;
   }, []);
@@ -84,19 +84,19 @@ const App = () => {
         <article className='frecuencyTableMain'>
           <FrequencyTable />
         </article>
-        <article>
-          <h1>Visor de Datos Inmobiliarios</h1>
-          <BarChart />
-          <LineChart />
-          <p>Tipo</p>
+        <article className='sectionPieCharts'>  
+          {/* <p>Tipo</p> */}
           <PieChartType />
-          <p>Region</p>
+          {/* <p>Region</p> */}
           <PieChartRegion />
-          <p>Venta</p>
+          {/* <p>Venta</p> */}
           <PieChartMethod />
-          <p>Habitaciones</p>
-          <PieChartRooms />
+          {/* <p>Habitaciones</p> */}
+          {/* <PieChartRooms /> */}
         </article>
+        <h1>Visor de Datos Inmobiliarios</h1>
+        <LineChart />
+        <BarChart />
         <Histogram />
         {/* <RadarChart /> */}
         <CsvLoader />

@@ -30,8 +30,15 @@ const PieChartType = () => {
     return acc;
   }, {});
 
+  const labelsMap = {
+    'br': 'Habitaciones (br)',
+    'h': 'Casa, cabaña, villa, semi, terraza (h)',
+    'u': 'Unidad, dúplex (u)',
+    't': 'Casa adosada (t)'
+  };
+
   const data = {
-    labels: Object.keys(typeCount),
+    labels: Object.keys(typeCount).map(key => labelsMap[key] || key),
     datasets: [
       {
         data: Object.values(typeCount),
@@ -40,10 +47,29 @@ const PieChartType = () => {
     ],
   };
 
+  const options = {
+    plugins: {
+      legend: {
+        labels: {
+          color: '#E3E3E3'
+        }
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const label = context.label || '';
+            const value = context.raw || '';
+            return `${label}: ${value}`;
+          }
+        }
+      }
+    }
+  };
+
   return (
     <div>
-      <h2>Distribución de Tipos de Propiedades</h2>
-      <Pie data={data} />
+      <h4>Distribución de Tipos de Propiedades</h4>
+      <Pie data={data} options={options} />
     </div>
   );
 };
