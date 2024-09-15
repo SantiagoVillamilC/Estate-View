@@ -68,7 +68,7 @@ const PieChartType = () => {
 
   return (
     <div>
-      <h4>Distribución de Tipos de Propiedades</h4>
+      <h3>Distribución de Tipos de Propiedades</h3>
       <Pie data={data} options={options} />
     </div>
   );

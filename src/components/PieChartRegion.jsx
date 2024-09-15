@@ -61,7 +61,7 @@ const PieChartRegion = () => {
 
   return (
     <div>
-      <h4>Distribución por Región</h4>
+      <h3>Distribución por Región</h3>
       <Pie data={data} options={options} />
     </div>
   );

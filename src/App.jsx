@@ -84,7 +84,7 @@ const App = () => {
         <article className='frecuencyTableMain'>
           <FrequencyTable />
         </article>
-        <article className='sectionPieCharts'>  
+        <article className='sectionPieCharts'>
           {/* <p>Tipo</p> */}
           <PieChartType />
           {/* <p>Region</p> */}
@@ -94,12 +94,16 @@ const App = () => {
           {/* <p>Habitaciones</p> */}
           {/* <PieChartRooms /> */}
         </article>
-        <h1>Visor de Datos Inmobiliarios</h1>
-        <LineChart />
-        <BarChart />
-        <Histogram />
+        <article className='sectionGraphs'>
+          <h1>Visor de Datos Inmobiliarios</h1>
+          <LineChart />
+          <BarChart />
+          <Histogram />
+        </article>
         {/* <RadarChart /> */}
-        <CsvLoader />
+        <article className='sectionTableLoader'>
+          <CsvLoader />
+        </article>
       </section>
       <footer></footer>
 

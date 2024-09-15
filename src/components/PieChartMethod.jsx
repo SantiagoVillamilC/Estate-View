@@ -75,7 +75,7 @@ const PieChartMethod = () => {
 
   return (
     <div>
-      <h4>Distribución por Método de Venta</h4>
+      <h3>Distribución por Estado de Venta</h3>
       <Pie data={data} options={options} />
     </div>
   );

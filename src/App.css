@@ -130,17 +130,26 @@ section {
 
 .frecuencyTableMain {
   grid-column: auto/span 12;
-  grid-row: auto/span 3;
+  grid-row: auto/span 12;
 }
 
 .sectionPieCharts{
   background-color: #1a1a1a;
   padding: 0.5% 1%;
   grid-column: auto/span 12;
-  grid-row: auto/span 6;
+  grid-row: auto/span 6 ;
   text-align: center;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   /* align-items: center; */
   /* justify-content: center; */
+}
+
+.sectionGraphs{
+  grid-column: auto/span 12;
+  grid-row: auto/span 25;
+}
+.sectionTableLoader{
+  grid-column: auto/span 12;
+  grid-row: auto/span 6 ;
 }
