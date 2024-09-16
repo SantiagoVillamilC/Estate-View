@@ -26,6 +26,8 @@ const App = () => {
   const count = useMotionValue(0);
   const rounded = useTransform(count, Math.round);
 
+  const currentYear = new Date().getFullYear();
+
   useEffect(() => {
     const animation = animate(count, 10000, { duration: 10 });
 
@@ -53,8 +55,10 @@ const App = () => {
         <div className='containerIntroInfo'>
           <p>Descubre cómo la distancia al centro de la ciudad de Melbourne impacta directamente en los precios del mercado inmobiliario a través de nuestro sitio web.</p>
           <div>
-            <button>Descargar archivo original (.csv)</button>
-            <button>Ver tabla de datos</button>
+            <button><a href="/Melbourne_housing_FULL.csv" download>
+              Descargar archivo CSV
+            </a></button>
+            <button><a href="#sectionTable">Ver tabla de datos</a></button>
           </div>
         </div>
 
@@ -96,16 +100,31 @@ const App = () => {
         </article>
         <article className='sectionGraphs'>
           <h1>Visor de Datos Inmobiliarios</h1>
-          <LineChart />
-          <BarChart />
-          <Histogram />
+          <div className='sectionGraphsElements'>
+            <BarChart />
+            <Histogram />
+            <div className='wideLineChart'>
+              <LineChart />
+            </div>
+          </div>
         </article>
         {/* <RadarChart /> */}
-        <article className='sectionTableLoader'>
+        <article className='sectionTableLoader' id='sectionTable'>
           <CsvLoader />
         </article>
       </section>
-      <footer></footer>
+      <footer className="footer">
+        <div className="footer-content">
+          <p>Hecho por Santiago V.</p>
+          <p>
+            <a href="https://github.com/SantiagoVillamilC/Estate-View" target="_blank" rel="noopener noreferrer">
+              GitHub
+            </a>
+          </p>
+          <p>Curso de Estadística</p>
+          <p>{currentYear}</p>
+        </div>
+      </footer>
 
       {/* <BoxPlotChart/> */}
     </div>
