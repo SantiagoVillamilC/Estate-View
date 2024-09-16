@@ -1,0 +1,61 @@
+.csv-loader {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    text-align: center;
+  }
+  
+  .styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 5px 0;
+    font-size: 1rem;
+    text-align: left;
+  }
+  
+  .styled-table th, .styled-table td {
+    padding: 5px 1%;
+    border: 1px solid #ddd;
+  }
+  
+  .styled-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: center;
+    width: auto;
+  }
+  
+  .styled-table tbody tr:nth-of-type(even) {
+    background-color: #1a1a1a;
+  }
+  
+  .styled-table tbody tr:hover {
+    background-color: #ddd;
+    color: #1a1a1a;
+    transition: 0.7s;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+  }
+  
+  .pagination button {
+    background-color: #009879;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .pagination span {
+    font-size: 18px;
+  }
+  

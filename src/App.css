@@ -130,7 +130,7 @@ section {
 
 .frecuencyTableMain {
   grid-column: auto/span 12;
-  grid-row: auto/span 12;
+  grid-row: auto/span 11;
 }
 
 .sectionPieCharts{

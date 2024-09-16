@@ -1,11 +1,11 @@
-// src/components/CsvLoader.jsx
 import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
+import './CsvLoader.css'; // Importamos los estilos
 
 const CsvLoader = () => {
   const [data, setData] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1); // Estado para la página actual
-  const itemsPerPage = 10; // Número de filas por página
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,84 +18,55 @@ const CsvLoader = () => {
       Papa.parse(csv, {
         header: true,
         skipEmptyLines: true,
-        complete: function(results) {
-          setData(results.data);
-        },
+        complete: (results) => setData(results.data),
       });
     };
 
     fetchData();
   }, []);
 
-  // Obtener los datos de la página actual
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  // Cambiar de página
-  const nextPage = () => {
-    if (currentPage < Math.ceil(data.length / itemsPerPage)) {
+  const handlePageChange = (direction) => {
+    if (direction === 'next' && currentPage < Math.ceil(data.length / itemsPerPage)) {
       setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const prevPage = () => {
-    if (currentPage > 1) {
+    } else if (direction === 'prev' && currentPage > 1) {
       setCurrentPage(currentPage - 1);
     }
   };
 
+  const columnsToShow = ['Suburb', 'Address', 'Rooms', 'Type', 'Price', 'Method', 'SellerG', 'Date', 'Distance', 'Postcode', 'Bathroom', 'Car']; // Solo las primeras 12 columnas
+
   return (
-    <div>
-      <h1>Datos del mercado inmobiliario de Melbourne</h1>
+    <div className="csv-loader">
+      <h1>Tabla de datos del mercado inmobiliario de Melbourne</h1>
       {data.length > 0 ? (
         <>
-          <table>
+          <table className="styled-table">
             <thead>
               <tr>
-                <th>Suburb</th>
-                <th>Address</th>
-                <th>Rooms</th>
-                <th>Type</th>
-                <th>Price</th>
-                <th>Method</th>
-                <th>SellerG</th>
-                <th>Date</th>
-                <th>Distance</th>
-                <th>Postcode</th>
-                <th>Bathroom</th>
-                <th>Car</th>
-                <th>BuildingArea</th>
+                {columnsToShow.map((header) => (
+                  <th key={header}>{header}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
               {currentItems.map((row, index) => (
                 <tr key={index}>
-                  <td>{row.Suburb}</td>
-                  <td>{row.Address}</td>
-                  <td>{row.Rooms}</td>
-                  <td>{row.Type}</td>
-                  <td>{row.Price}</td>
-                  <td>{row.Method}</td>
-                  <td>{row.SellerG}</td>
-                  <td>{row.Date}</td>
-                  <td>{row.Distance}</td>
-                  <td>{row.Postcode}</td>
-                  <td>{row.Bathroom}</td>
-                  <td>{row.Car}</td>
-                  <td>{row.BuildingArea}</td>
+                  {columnsToShow.map((col) => (
+                    <td key={col}>{row[col] || 'N/A'}</td>
+                  ))}
                 </tr>
               ))}
             </tbody>
           </table>
 
-          {/* Paginación */}
-          <div>
-            <button onClick={prevPage} disabled={currentPage === 1}>
+          <div className="pagination">
+            <button onClick={() => handlePageChange('prev')} disabled={currentPage === 1}>
               Anterior
             </button>
-            <span> Página {currentPage} de {Math.ceil(data.length / itemsPerPage)} </span>
-            <button onClick={nextPage} disabled={currentPage === Math.ceil(data.length / itemsPerPage)}>
+            <span>Página {currentPage} de {Math.ceil(data.length / itemsPerPage)}</span>
+            <button onClick={() => handlePageChange('next')} disabled={currentPage === Math.ceil(data.length / itemsPerPage)}>
               Siguiente
             </button>
           </div>

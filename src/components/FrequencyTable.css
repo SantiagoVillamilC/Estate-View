@@ -1,0 +1,45 @@
+.frequency-table-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .table-and-conclusion {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    margin-bottom: 20px;
+  }
+  
+  .frequency-table {
+    width: 50%;
+    border-collapse: collapse;
+    margin-right: 20px;
+  }
+  
+  .frequency-table th, .frequency-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  /* .frequency-table th {
+    background-color: #f2f2f2;
+  } */
+  
+  .conclusion {
+    width: 40%;
+    /* background-color: #f9f9f9; */
+    padding: 20px;
+    border: 1px solid #ddd;
+  }
+  
+  .conclusion h3 {
+    margin-top: 0;
+  }
+  
+  .graphAverage{
+    text-align: center;
+    width: 100%;
+    max-width: 1200px;
+  }

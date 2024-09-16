@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
-import { Line } from 'react-chartjs-2'; // Usaremos un gráfico de líneas para mostrar el cambio de precios
+import { Line } from 'react-chartjs-2';
+import './FrequencyTable.css'; // Importar el archivo de estilo
 
 const FrequencyTable = () => {
   const [csvData, setCsvData] = useState([]);
@@ -26,7 +27,6 @@ const FrequencyTable = () => {
     fetchData();
   }, []);
 
-  // Función para procesar los datos y crear la tabla de frecuencia
   const processFrequencyData = () => {
     const frequencyData = {};
     csvData.forEach((row) => {
@@ -34,7 +34,6 @@ const FrequencyTable = () => {
       const price = parseFloat(row.Price);
 
       if (!isNaN(distance) && !isNaN(price)) {
-        // Definir rangos de distancia al CBD
         let range = '';
         if (distance <= 5) range = '0-5 km';
         else if (distance <= 10) range = '5-10 km';
@@ -50,7 +49,6 @@ const FrequencyTable = () => {
       }
     });
 
-    // Calcular el precio promedio para cada rango
     return Object.keys(frequencyData).map((range) => ({
       range,
       avgPrice: (frequencyData[range].total / frequencyData[range].count).toFixed(2),
@@ -60,7 +58,6 @@ const FrequencyTable = () => {
 
   const frequencyData = processFrequencyData();
 
-  // Crear los datos para el gráfico de líneas
   const chartData = {
     labels: frequencyData.map((row) => row.range),
     datasets: [
@@ -68,14 +65,41 @@ const FrequencyTable = () => {
         label: 'Precio Promedio',
         data: frequencyData.map((row) => row.avgPrice),
         fill: false,
-        backgroundColor: 'rgba(75,192,192,0.2)',
+        backgroundColor: 'rgba(75,192,192,0.4)',
         borderColor: 'rgba(75,192,192,1)',
         tension: 0.4,
+        pointRadius: 8, // Tamaño de las burbujas de los puntos de datos
+        pointHoverRadius: 10, // Tamaño cuando pasas el cursor por encima del punto
       },
     ],
   };
 
-  // Análisis y conclusiones basadas en los resultados
+  const chartOptions = {
+    scales: {
+      x: {
+        ticks: {
+          color: '#E3E3E3', // Color de las etiquetas en el eje X
+        },
+        grid: {
+          color: '#E3E3E3', // Color de la cuadrícula en el eje X
+        },
+      },
+      y: {
+        ticks: {
+          color: '#E3E3E3', // Color de las etiquetas en el eje Y
+        },
+        grid: {
+          color: '#E3E3E3', // Color de la cuadrícula en el eje Y
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        display: false, // Ocultar la leyenda
+      },
+    },
+  };
+
   const renderConclusion = () => {
     if (frequencyData.length > 0) {
       const highestPrice = Math.max(...frequencyData.map((row) => parseFloat(row.avgPrice)));
@@ -84,7 +108,7 @@ const FrequencyTable = () => {
       const farthestRange = frequencyData.find((row) => parseFloat(row.avgPrice) === lowestPrice);
 
       return (
-        <div>
+        <div className="conclusion">
           <h3>Conclusión</h3>
           <p>
             Basado en los datos analizados, parece que las propiedades más cercanas al CBD (en el rango de {closestRange.range})
@@ -102,33 +126,37 @@ const FrequencyTable = () => {
   };
 
   return (
-    <div>
+    <div className="frequency-table-container">
       <h2>Tabla de Frecuencia: Precio vs Distancia al CBD</h2>
       {csvData.length > 0 ? (
         <>
-          <table>
-            <thead>
-              <tr>
-                <th>Rango de Distancia</th>
-                <th>Precio Promedio</th>
-                <th>Número de Propiedades</th>
-              </tr>
-            </thead>
-            <tbody>
-              {frequencyData.map((row) => (
-                <tr key={row.range}>
-                  <td>{row.range}</td>
-                  <td>${parseFloat(row.avgPrice).toLocaleString()}</td>
-                  <td>{row.count}</td>
+          <div className="table-and-conclusion">
+            <table className="frequency-table">
+              <thead>
+                <tr>
+                  <th>Rango de Distancia</th>
+                  <th>Precio Promedio</th>
+                  <th>Número de Propiedades</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {frequencyData.map((row) => (
+                  <tr key={row.range}>
+                    <td>{row.range}</td>
+                    <td>${parseFloat(row.avgPrice).toLocaleString()}</td>
+                    <td>{row.count}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
-          <h3>Visualización del Precio Promedio por Distancia</h3>
-          <Line data={chartData} />
+            {renderConclusion()}
+          </div>
+          <div className='graphAverage'>
+            <h3>Visualización del Precio Promedio por Distancia</h3>
+            <Line data={chartData} options={chartOptions} />
+          </div>
 
-          {renderConclusion()}
         </>
       ) : (
         <p>Cargando datos...</p>
