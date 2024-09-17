@@ -101,10 +101,10 @@ const App = () => {
         <article className='sectionGraphs'>
           <h1>Visor de Datos Inmobiliarios</h1>
           <div className='sectionGraphsElements'>
-            <BarChart />
+            <LineChart />
             <Histogram />
             <div className='wideLineChart'>
-              <LineChart />
+              <BarChart />
             </div>
           </div>
         </article>

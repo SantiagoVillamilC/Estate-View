@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
 import { Line } from 'react-chartjs-2';
-import './FrequencyTable.css'; // Importar el archivo de estilo
+import './FrequencyTable.css';
 
 const FrequencyTable = () => {
   const [csvData, setCsvData] = useState([]);
@@ -42,18 +42,27 @@ const FrequencyTable = () => {
         else range = '30+ km';
 
         if (!frequencyData[range]) {
-          frequencyData[range] = { total: 0, count: 0 };
+          frequencyData[range] = { total: 0, count: 0, prices: [] };
         }
         frequencyData[range].total += price;
         frequencyData[range].count += 1;
+        frequencyData[range].prices.push(price);
       }
     });
 
-    return Object.keys(frequencyData).map((range) => ({
-      range,
-      avgPrice: (frequencyData[range].total / frequencyData[range].count).toFixed(2),
-      count: frequencyData[range].count,
-    }));
+    return Object.keys(frequencyData).map((range) => {
+      const prices = frequencyData[range].prices;
+      const avgPrice = frequencyData[range].total / frequencyData[range].count;
+      const variance = prices.reduce((acc, price) => acc + Math.pow(price - avgPrice, 2), 0) / frequencyData[range].count;
+      const stdDev = Math.sqrt(variance).toFixed(2);
+
+      return {
+        range,
+        avgPrice: avgPrice.toFixed(2),
+        count: frequencyData[range].count,
+        stdDev,
+      };
+    });
   };
 
   const frequencyData = processFrequencyData();
@@ -136,6 +145,7 @@ const FrequencyTable = () => {
                 <tr>
                   <th>Rango de Distancia</th>
                   <th>Precio Promedio</th>
+                  <th>Desviación Estándar</th>
                   <th>Número de Propiedades</th>
                 </tr>
               </thead>
@@ -144,6 +154,7 @@ const FrequencyTable = () => {
                   <tr key={row.range}>
                     <td>{row.range}</td>
                     <td>${parseFloat(row.avgPrice).toLocaleString()}</td>
+                    <td>{row.stdDev}</td>
                     <td>{row.count}</td>
                   </tr>
                 ))}
