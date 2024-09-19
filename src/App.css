@@ -110,7 +110,7 @@ section {
 .main {
   /* background-color: aqua; */
   grid-column: auto/span 12;
-  grid-row: auto/span 12;
+  grid-row: auto/span 13;
 
   display: flex;
   flex-direction: column;
