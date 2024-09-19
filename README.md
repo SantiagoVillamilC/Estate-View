@@ -17,7 +17,7 @@ Este proyecto es una aplicación web interactiva que permite la visualización y
 
 - npm install
 
--npm run dev
+- npm run dev
 
 ## Dependencias
 
