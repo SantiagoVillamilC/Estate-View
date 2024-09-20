@@ -13,6 +13,9 @@ import PieChartRegion from './components/PieChartRegion';
 import PieChartMethod from './components/PieChartMethod';
 import PieChartRooms from './components/PieChartRooms';
 import FrequencyTable from './components/FrequencyTable';
+import AboutSite from './components/AboutSite';
+import HowItWorks from './components/HowItWorks';
+import WhyItWasMade from './components/WhyItWasMade';
 
 const texts = ["+30.000 registros", "# gráficas", "Datos actualizados", "Análisis en curso"];
 
@@ -20,6 +23,22 @@ const App = () => {
   //const [csvData, setCsvData] = useState([]);
 
   //console.log('csvData en App.jsx:', csvData); // Imprimir datos en consola para verificar que se cargan
+
+  const [showAbout, setShowAbout] = useState(false);
+  const [showHowItWorks, setShowHowItWorks] = useState(false);
+  const [showWhyItWasMade, setShowWhyItWasMade] = useState(false);
+
+  const toggleAbout = () => {
+    setShowAbout(!showAbout);
+  };
+
+  const toggleHowItWorks = () => {
+    setShowHowItWorks(!showHowItWorks);
+  };
+
+  const toggleWhyItWasMade = () => {
+    setShowWhyItWasMade(!showWhyItWasMade);
+  };
 
   const count = useMotionValue(0);
   const rounded = useTransform(count, Math.round);
@@ -39,12 +58,17 @@ const App = () => {
         <h4>Estate View - Estadistica</h4>
         <div>
           <u>
-            <ol><a href="">¿Que es?</a></ol>
-            <ol><a href="">¿Como funciona?</a></ol>
-            <ol><a href="">¿Por que fue realizado?</a></ol>
+          <ol><a href="#" onClick={toggleAbout}>¿Qué es?</a></ol>
+            <ol><a href="#" onClick={toggleHowItWorks}>¿Cómo funciona?</a></ol>
+            <ol><a href="#" onClick={toggleWhyItWasMade}>¿Por qué fue realizado?</a></ol>
           </u>
         </div>
       </header>
+      {/* Renderiza AboutSite solo si showAbout es true */}
+      {showAbout && <AboutSite onClose={toggleAbout} />}
+      {showHowItWorks && <HowItWorks onClose={toggleHowItWorks} />}
+      {showWhyItWasMade && <WhyItWasMade onClose={toggleWhyItWasMade} />}
+
       <div className='containerIntro'>
         <div className='containerIntroTitle'>
           <p className='textIntro'>Análisis con más de</p>
@@ -53,7 +77,7 @@ const App = () => {
         <div className='containerIntroInfo'>
           <p>Descubre cómo la distancia al centro de la ciudad de Melbourne impacta directamente en los precios del mercado inmobiliario a través de nuestro sitio web.</p>
           <div>
-            <button><a href="/Melbourne_housing_FULL.csv" download>
+            <button><a href="https://www.kaggle.com/datasets/anthonypino/melbourne-housing-market?select=Melbourne_housing_FULL.csv"  target='_blank'>
               Descargar archivo CSV
             </a></button>
             <button><a href="#sectionTable">Ver tabla de datos</a></button>

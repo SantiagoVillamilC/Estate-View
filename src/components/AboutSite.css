@@ -1,0 +1,36 @@
+/* AboutSite.css */
+.about-site-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo opaco */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+  }
+  
+  .about-site-content {
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.87);
+    text-align: center;
+    max-width: 600px;
+    width: 80%;
+  }
+  
+  .about-site-content h2 {
+    margin-bottom: 15px;
+    color: rgba(255, 255, 255, 0.9);
+  }
+  
+  .about-site-content p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
