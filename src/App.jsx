@@ -46,7 +46,7 @@ const App = () => {
   const currentYear = new Date().getFullYear();
 
   useEffect(() => {
-    const animation = animate(count, 10000, { duration: 10 });
+    const animation = animate(count, 30000, { duration: 10 });
 
     return animation.stop;
   }, []);

@@ -5,23 +5,30 @@ import './FrequencyTable.css';
 
 const FrequencyTable = () => {
   const [csvData, setCsvData] = useState([]);
+  const [loading, setLoading] = useState(true); // Estado de carga
 
   // Cargar el archivo CSV
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch('/Melbourne_housing_FULL.csv');
-      const reader = response.body.getReader();
-      const result = await reader.read();
-      const decoder = new TextDecoder('utf-8');
-      const csv = decoder.decode(result.value);
+      try {
+        const response = await fetch('/Melbourne_housing_FULL.csv');
+        const reader = response.body.getReader();
+        const result = await reader.read();
+        const decoder = new TextDecoder('utf-8');
+        const csv = decoder.decode(result.value);
 
-      Papa.parse(csv, {
-        header: true,
-        skipEmptyLines: true,
-        complete: function (results) {
-          setCsvData(results.data);
-        },
-      });
+        Papa.parse(csv, {
+          header: true,
+          skipEmptyLines: true,
+          complete: function (results) {
+            setCsvData(results.data);
+            setLoading(false); // Datos cargados, detener carga
+          },
+        });
+      } catch (error) {
+        console.error('Error al cargar el archivo CSV:', error);
+        setLoading(false); // Asegurar que la carga termine en caso de error
+      }
     };
 
     fetchData();
@@ -65,7 +72,7 @@ const FrequencyTable = () => {
     });
   };
 
-  const frequencyData = processFrequencyData();
+  const frequencyData = csvData.length > 0 ? processFrequencyData() : [];
 
   const chartData = {
     labels: frequencyData.map((row) => row.range),
@@ -77,8 +84,8 @@ const FrequencyTable = () => {
         backgroundColor: 'rgba(75,192,192,0.4)',
         borderColor: 'rgba(75,192,192,1)',
         tension: 0.4,
-        pointRadius: 8, // Tamaño de las burbujas de los puntos de datos
-        pointHoverRadius: 10, // Tamaño cuando pasas el cursor por encima del punto
+        pointRadius: 8,
+        pointHoverRadius: 10,
       },
     ],
   };
@@ -87,24 +94,24 @@ const FrequencyTable = () => {
     scales: {
       x: {
         ticks: {
-          color: '#E3E3E3', // Color de las etiquetas en el eje X
+          color: '#E3E3E3',
         },
         grid: {
-          color: '#E3E3E3', // Color de la cuadrícula en el eje X
+          color: '#E3E3E3',
         },
       },
       y: {
         ticks: {
-          color: '#E3E3E3', // Color de las etiquetas en el eje Y
+          color: '#E3E3E3',
         },
         grid: {
-          color: '#E3E3E3', // Color de la cuadrícula en el eje Y
+          color: '#E3E3E3',
         },
       },
     },
     plugins: {
       legend: {
-        display: false, // Ocultar la leyenda
+        display: false,
       },
     },
   };
@@ -133,6 +140,10 @@ const FrequencyTable = () => {
     }
     return null;
   };
+
+  if (loading) {
+    return <p>Cargando datos...</p>; // Mostrar indicador de carga
+  }
 
   return (
     <div className="frequency-table-container">
@@ -163,14 +174,13 @@ const FrequencyTable = () => {
 
             {renderConclusion()}
           </div>
-          <div className='graphAverage'>
+          <div className="graphAverage">
             <h3>Visualización del Precio Promedio por Distancia</h3>
             <Line data={chartData} options={chartOptions} />
           </div>
-
         </>
       ) : (
-        <p>Cargando datos...</p>
+        <p>No se encontraron datos para mostrar.</p>
       )}
     </div>
   );
