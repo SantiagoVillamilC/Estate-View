@@ -11,7 +11,7 @@ Chart.register(...registerables);
 const ScatterPlot = () => {
   const [allData, setAllData] = useState([]);
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // Inicialmente en estado "loading"
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 7000;
 
@@ -42,11 +42,11 @@ const ScatterPlot = () => {
 
             setAllData(processedData);
             setData(processedData.slice(0, itemsPerPage));
-            setLoading(false);
+            setLoading(false); // Solo cuando se terminan de procesar los datos, se cambia el estado
           },
           error: (error) => {
             console.error('Error parsing CSV:', error);
-            setLoading(false);
+            setLoading(false); // También cambia el estado si ocurre un error
           }
         });
       } catch (error) {
@@ -76,15 +76,6 @@ const ScatterPlot = () => {
     }
   };
 
-  // Agrupación por colores según el rango de distancia
-  const getColorByDistance = (distance) => {
-    if (distance <= 5) return 'rgba(255, 99, 132, 0.7)'; // 0-5 km
-    if (distance <= 10) return 'rgba(54, 162, 235, 0.7)'; // 5-10 km
-    if (distance <= 20) return 'rgba(75, 192, 192, 0.7)'; // 10-20 km
-    if (distance <= 30) return 'rgba(153, 102, 255, 0.7)'; // 20-30 km
-    return 'rgba(255, 159, 64, 0.7)'; // Más de 30 km
-  };
-
   const chartData = {
     datasets: [
       {
@@ -109,8 +100,7 @@ const ScatterPlot = () => {
         backgroundColor: 'rgba(75, 192, 192, 0.7)',
         borderColor: 'rgba(75, 192, 192, 0.7)',
         pointRadius: 5,
-        pointHoverRadius: 7,
-        color: '#E3E3E3',
+        pointHoverRadius: 7
       },
       {
         label: '20-30 km',
@@ -173,7 +163,7 @@ const ScatterPlot = () => {
           color: '#E3E3E3',
         },
         grid: {
-          color: '#E3E3E3', // Color de las líneas de la cuadrícula
+          color: '#E3E3E3',
         },
       },
       y: {
@@ -183,13 +173,14 @@ const ScatterPlot = () => {
           color: '#E3E3E3',
         },
         grid: {
-          color: '#E3E3E3', // Color de las líneas de la cuadrícula
+          color: '#E3E3E3',
         },
       }
     }
   };
 
   if (loading) {
+    // Muestra un mensaje de carga mientras los datos aún están siendo procesados
     return <p>Cargando datos para el gráfico...</p>;
   }
 
