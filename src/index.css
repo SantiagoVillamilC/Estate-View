@@ -45,7 +45,7 @@ button {
   font-weight: 500;
   font-family: inherit;
   background-color: #1a1a1a;
-  color: rgba(255, 255, 255, 0.87);
+  /* color: rgba(255, 255, 255, 0.87); */
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -57,15 +57,9 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-/* @media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
+@media (prefers-color-scheme: light) {
   button {
     background-color: #f9f9f9;
+    color: #f9f9f9;
   }
-} */
+}

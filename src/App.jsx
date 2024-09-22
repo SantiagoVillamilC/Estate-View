@@ -58,7 +58,7 @@ const App = () => {
         <h4>Estate View - Estadistica</h4>
         <div>
           <u>
-          <ol><a href="#" onClick={toggleAbout}>¿Qué es?</a></ol>
+            <ol><a href="#" onClick={toggleAbout}>¿Qué es?</a></ol>
             <ol><a href="#" onClick={toggleHowItWorks}>¿Cómo funciona?</a></ol>
             <ol><a href="#" onClick={toggleWhyItWasMade}>¿Por qué fue realizado?</a></ol>
           </u>
@@ -77,7 +77,7 @@ const App = () => {
         <div className='containerIntroInfo'>
           <p>Descubre cómo la distancia al centro de la ciudad de Melbourne impacta directamente en los precios del mercado inmobiliario a través de nuestro sitio web.</p>
           <div>
-            <button><a href="https://www.kaggle.com/datasets/anthonypino/melbourne-housing-market?select=Melbourne_housing_FULL.csv"  target='_blank'>
+            <button><a href="https://www.kaggle.com/datasets/anthonypino/melbourne-housing-market?select=Melbourne_housing_FULL.csv" target='_blank'>
               Descargar archivo CSV
             </a></button>
             <button><a href="#sectionTable">Ver tabla de datos</a></button>
@@ -134,18 +134,34 @@ const App = () => {
           <CsvLoader />
         </article>
       </section>
-      <footer className="footer">
-        <div className="footer-content">
+      <motion.footer
+        className="footer"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, ease: 'easeInOut' }}
+      >
+        <motion.div
+          className="footer-content"
+          // whileHover={{ scale: 1.05 }}
+          transition={{ type: 'spring', stiffness: 300 }}
+        >
           <p>Hecho por Santiago V.</p>
-          <p>
-            <a href="https://github.com/SantiagoVillamilC/Estate-View" target="_blank" rel="noopener noreferrer">
-              GitHub
-            </a>
-          </p>
+
+          <motion.a
+            href="https://github.com/SantiagoVillamilC/Estate-View"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.2, color: '#f39c12' }}
+            whileTap={{ scale: 0.9 }}
+          >
+            Visita el codigo de este proyecto en mi GitHub
+          </motion.a>
+
           <p>Curso de Estadística</p>
+
           <p>{currentYear}</p>
-        </div>
-      </footer>
+        </motion.div>
+      </motion.footer>
 
       {/* <BoxPlotChart/> */}
     </div>
