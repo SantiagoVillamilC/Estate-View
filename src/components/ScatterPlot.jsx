@@ -20,12 +20,20 @@ const ScatterPlot = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/Melbourne_housing_FULL.csv');
+        // Desactivar la caché para evitar la carga de datos inconsistentes
+        const response = await fetch('/Melbourne_housing_FULL.csv', { cache: 'no-store' });
         const reader = response.body.getReader();
-        const result = await reader.read();
+        let csv = '';
         const decoder = new TextDecoder('utf-8');
-        const csv = decoder.decode(result.value);
 
+        // Leer el archivo CSV en fragmentos
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          csv += decoder.decode(value);
+        }
+
+        // Parsear los datos del CSV
         Papa.parse(csv, {
           header: true,
           skipEmptyLines: true,
@@ -35,7 +43,7 @@ const ScatterPlot = () => {
               const price = parseFloat(row.Price);
 
               if (!isNaN(distance) && !isNaN(price)) {
-                // Añadir desplazamiento aleatorio pequeño
+                // Añadir desplazamiento aleatorio pequeño (jitter) para evitar sobreposición
                 const jitter = Math.random() * 0.1 - 0.05;
                 return { distance: distance + jitter, price };
               }
@@ -51,7 +59,7 @@ const ScatterPlot = () => {
           },
           error: (error) => {
             console.error('Error parsing CSV:', error);
-            setLoading(false); // También cambia el estado si ocurre un error
+            setLoading(false); // Cambiar el estado si ocurre un error
           }
         });
       } catch (error) {
