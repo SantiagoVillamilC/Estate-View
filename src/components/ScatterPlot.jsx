@@ -13,7 +13,7 @@ const ScatterPlot = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true); // Inicialmente en estado "loading"
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 7000;
+  const itemsPerPage = 10000;
 
   const isDataProcessed = useRef(false); // Ref para controlar si los datos han sido procesados
 
@@ -203,7 +203,7 @@ const ScatterPlot = () => {
 
   return (
     <div>
-      <h2>Gráfico de Dispersión: Precio vs. Distancia al CBD</h2>
+      <h2>Gráfico de Dispersión: Precio vs. Distancia al CBD <span>(alrededor de 10.000 datos por pagina)</span></h2>
       <Scatter data={chartData} options={chartOptions} />
       <div>
         <button onClick={handlePreviousPage} disabled={currentPage === 1}>

@@ -174,10 +174,12 @@ const FrequencyTable = () => {
 
             {renderConclusion()}
           </div>
-          <div className="graphAverage">
-            <h3>Visualización del Precio Promedio por Distancia</h3>
-            <Line data={chartData} options={chartOptions} />
-          </div>
+          {!loading && ( // Asegurarse de que la gráfica solo se muestre cuando no esté cargando
+            <div className="graphAverage">
+              <h3>Visualización del Precio Promedio por Distancia</h3>
+              <Line data={chartData} options={chartOptions} />
+            </div>
+          )}
         </>
       ) : (
         <p>No se encontraron datos para mostrar.</p>
