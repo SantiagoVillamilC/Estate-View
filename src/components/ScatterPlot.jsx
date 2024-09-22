@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Papa from 'papaparse';
 import { Scatter } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
@@ -14,6 +14,8 @@ const ScatterPlot = () => {
   const [loading, setLoading] = useState(true); // Inicialmente en estado "loading"
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 7000;
+
+  const isDataProcessed = useRef(false); // Ref para controlar si los datos han sido procesados
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,9 +42,12 @@ const ScatterPlot = () => {
               return null;
             }).filter((row) => row !== null);
 
+            // Guardar los datos completos y los de la primera página
             setAllData(processedData);
             setData(processedData.slice(0, itemsPerPage));
-            setLoading(false); // Solo cuando se terminan de procesar los datos, se cambia el estado
+
+            isDataProcessed.current = true; // Marcar como procesados
+            setLoading(false); // Cambiar a falso una vez que los datos están listos
           },
           error: (error) => {
             console.error('Error parsing CSV:', error);
@@ -59,20 +64,24 @@ const ScatterPlot = () => {
   }, []);
 
   const handleNextPage = () => {
-    const nextPage = currentPage + 1;
-    const start = (nextPage - 1) * itemsPerPage;
-    const end = nextPage * itemsPerPage;
-    setData(allData.slice(start, end));
-    setCurrentPage(nextPage);
+    if (isDataProcessed.current) {
+      const nextPage = currentPage + 1;
+      const start = (nextPage - 1) * itemsPerPage;
+      const end = nextPage * itemsPerPage;
+      setData(allData.slice(start, end));
+      setCurrentPage(nextPage);
+    }
   };
 
   const handlePreviousPage = () => {
-    const previousPage = currentPage - 1;
-    if (previousPage > 0) {
-      const start = (previousPage - 1) * itemsPerPage;
-      const end = previousPage * itemsPerPage;
-      setData(allData.slice(start, end));
-      setCurrentPage(previousPage);
+    if (isDataProcessed.current) {
+      const previousPage = currentPage - 1;
+      if (previousPage > 0) {
+        const start = (previousPage - 1) * itemsPerPage;
+        const end = previousPage * itemsPerPage;
+        setData(allData.slice(start, end));
+        setCurrentPage(previousPage);
+      }
     }
   };
 
