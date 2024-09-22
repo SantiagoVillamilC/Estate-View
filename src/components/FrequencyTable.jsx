@@ -7,22 +7,37 @@ const FrequencyTable = () => {
   const [csvData, setCsvData] = useState([]);
   const [loading, setLoading] = useState(true); // Estado de carga
 
-  // Cargar el archivo CSV
+  // Cargar el archivo CSV con desactivación del caché
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/Melbourne_housing_FULL.csv');
-        const reader = response.body.getReader();
-        const result = await reader.read();
-        const decoder = new TextDecoder('utf-8');
-        const csv = decoder.decode(result.value);
+        const response = await fetch('/Melbourne_housing_FULL.csv', {
+          headers: { 'Cache-Control': 'no-cache' }, // Desactiva caché
+        });
 
+        if (!response.ok) {
+          throw new Error('Error en la respuesta del servidor');
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder('utf-8');
+        let csv = '';
+        let done = false;
+
+        // Leer los datos en fragmentos
+        while (!done) {
+          const { value, done: readerDone } = await reader.read();
+          done = readerDone;
+          csv += decoder.decode(value || new Uint8Array(), { stream: !readerDone });
+        }
+
+        // Parsear el CSV utilizando Papaparse
         Papa.parse(csv, {
           header: true,
           skipEmptyLines: true,
           complete: function (results) {
             setCsvData(results.data);
-            setLoading(false); // Datos cargados, detener carga
+            setLoading(false); // Detener el estado de carga
           },
         });
       } catch (error) {
@@ -34,6 +49,7 @@ const FrequencyTable = () => {
     fetchData();
   }, []);
 
+  // Procesar los datos de frecuencia
   const processFrequencyData = () => {
     const frequencyData = {};
     csvData.forEach((row) => {
@@ -174,7 +190,7 @@ const FrequencyTable = () => {
 
             {renderConclusion()}
           </div>
-          {!loading && ( // Asegurarse de que la gráfica solo se muestre cuando no esté cargando
+          {!loading && (
             <div className="graphAverage">
               <h3>Visualización del Precio Promedio por Distancia</h3>
               <Line data={chartData} options={chartOptions} />
